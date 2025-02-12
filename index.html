@@ -273,52 +273,51 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    let isMuted = true;  // Tracks the global mute state
+    let globalMuted = true;
 
     function playActiveVideo() {
-    let videos = document.querySelectorAll('video');
-    videos.forEach(video => {
-        if (video !== document.querySelector('.swiper-slide-active video')) {
-            video.pause();
-            video.muted = true;  // Ensure other videos are muted
-        }
-    });
+        let videos = document.querySelectorAll('video');
+        videos.forEach(video => {
+            if (video !== document.querySelector('.swiper-slide-active video')) {
+                video.pause();
+                video.muted = true;
+            }
+        });
 
-    let activeSlide = document.querySelector('.swiper-slide-active video');
-    let activeIcon = document.querySelector('.swiper-slide-active .playPauseIcon');
-    let unmuteIcon = document.querySelector('.swiper-slide-active .unmuteIcon');
-    let loadingSpinner = document.querySelector('.swiper-slide-active .loadingSpinner');
+        let activeSlide = document.querySelector('.swiper-slide-active video');
+        let activeIcon = document.querySelector('.swiper-slide-active .playPauseIcon');
+        let unmuteIcon = document.querySelector('.swiper-slide-active .unmuteIcon');
+        let loadingSpinner = document.querySelector('.swiper-slide-active .loadingSpinner');
 
-    if (activeSlide) {
-        if (!activeSlide.src) {
-            activeSlide.src = activeSlide.getAttribute('data-src');
-        }
+        if (activeSlide) {
+            if (!activeSlide.src) {
+                activeSlide.src = activeSlide.getAttribute('data-src');
+            }
 
-        activeSlide.muted = isMuted;
+            // Mute or unmute the active video based on the global mute state
+            activeSlide.muted = globalMuted;
 
-        if (activeSlide.paused) {
-            activeSlide.play();
-        }
+            if (activeSlide.paused) {
+                activeSlide.play();
+            }
 
-        activeIcon.style.display = 'none';
+            activeIcon.style.display = 'none';
 
-        activeSlide.onwaiting = () => {
-            loadingSpinner.style.display = 'block';
-        };
+            activeSlide.onwaiting = () => {
+                loadingSpinner.style.display = 'block';
+            };
 
-        activeSlide.onplaying = () => {
-            loadingSpinner.style.display = 'none';
-        };
+            activeSlide.onplaying = () => {
+                loadingSpinner.style.display = 'none';
+            };
 
-        if (activeSlide.muted) {
-            unmuteIcon.innerHTML = '<i class="fas fa-volume-mute"></i>';
-        } else {
-            unmuteIcon.innerHTML = '<i class="fas fa-volume-up"></i>';
+            if (activeSlide.muted) {
+                unmuteIcon.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                unmuteIcon.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
         }
     }
-}
-
-
 
     function updateURL() {
         const activeSlide = document.querySelector('.swiper-slide-active');
@@ -326,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const newURL = `#${videoTitle.replace(/\s+/g, '-').toLowerCase()}`;
 
         if (window.location.hash !== newURL) {
-            history.replaceState({}, '', newURL);  // Use replaceState instead of pushState
+            history.replaceState({}, '', newURL);
         }
     }
 
@@ -347,61 +346,60 @@ document.addEventListener("DOMContentLoaded", () => {
 
         observer.observe(video);
 
-       video.addEventListener('click', () => {
-    if (video.paused) {
-        video.play();
-        playPauseIcon.style.display = 'none';
-    } else {
-        video.pause();
-        playPauseIcon.style.display = 'block';
-        video.muted = true;  // Ensure the video is muted when paused
-    }
-});
-
+        video.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playPauseIcon.style.display = 'none';
+                if (video.muted) {
+                    video.muted = false;  // Unmute the video when play is clicked
+                }
+            } else {
+                video.pause();
+                playPauseIcon.style.display = 'block';
+                video.muted = true;
+            }
+        });
     });
 
     document.querySelectorAll('.unmuteIcon').forEach((button) => {
         button.addEventListener('click', () => {
             let video = button.closest('.swiper-slide').querySelector('video');
             
-            // If the video is muted, unmute it globally
-            if (isMuted) {
-                isMuted = false;
+            if (video.muted) {
+                video.muted = false;
                 button.innerHTML = '<i class="fas fa-volume-up"></i>';
             } else {
-                isMuted = true;
+                video.muted = true;
                 button.innerHTML = '<i class="fas fa-volume-mute"></i>';
             }
 
-            // Apply the global mute state to all videos
+            globalMuted = document.querySelector('.swiper-slide-active video').muted;
+
             document.querySelectorAll('video').forEach((videoElement) => {
-                videoElement.muted = isMuted;
+                videoElement.muted = globalMuted;
             });
         });
     });
 
     playActiveVideo();
 
-    // New functionality to handle URL hash changes and load the correct video
     function handleHashChange() {
-        const hash = window.location.hash.substring(1); // Remove the "#" character
+        const hash = window.location.hash.substring(1);
         if (hash) {
             const targetSlide = Array.from(document.querySelectorAll('.swiper-slide'))
                 .find(slide => slide.querySelector('.videoFooter p').textContent.toLowerCase().replace(/\s+/g, '-') === hash);
             
             if (targetSlide) {
                 swiper.slideTo(Array.from(document.querySelectorAll('.swiper-slide')).indexOf(targetSlide));
-                playActiveVideo();  // Play the video of the target slide
+                playActiveVideo();
             }
         }
     }
 
-    // Listen for hash change events
     window.addEventListener('hashchange', handleHashChange);
-
-    // Call the function once on page load to handle the initial hash
     handleHashChange();
 });
+
 
 
 
