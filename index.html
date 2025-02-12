@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Clone</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+      html, body {
+  overflow-x: hidden;  /* Disable horizontal scroll */
+  overflow-y: scroll;  /* Enable vertical scroll, but hide the scrollbar */
+  height: 100%;         /* Ensure full height */
+  margin: 0;            /* Remove default margin */
+  padding: 0;           /* Remove default padding */
+}
+
+::-webkit-scrollbar {
+  display: none;  /* Hide the scrollbar in Webkit browsers (Chrome, Safari, Opera) */
+}
+
+/* Optional: Hide scrollbar thumb as well */
+::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+        body {
+            overflow: hidden;
+            background: black;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+        .swiper-container {
+            height: 100vh;
+            width: 100vw;
+        }
+        .swiper-slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+        }
+        video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+        }
+        .videoFooter {
+            position: absolute;
+            bottom: 50px;
+            left: 20px;
+            color: white;
+            font-size: 16px;
+        }
+        .videoFooter h3 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .videoSidebar {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .videoSidebar button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .playPauseIcon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 60px;
+            color: white;
+            display: block;
+            pointer-events: none;
+        }
+        .unmuteIcon {
+            font-size: 28px;
+        }
+        .loadingSpinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            color: white;
+            display: none;
+        }
+
+        
+        .top-text-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    z-index: 10;
+}
+
+.top-text {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.top-text img {
+    width: 5em;
+    margin-top: -1em;
+    filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.7)); /* Adds subtle dark shadow to the logo */
+}
+
+
+.back-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    margin-top: -1em;
+    margin-left: 0.4em;
+    filter: drop-shadow(0px 0px 8px rgba(0, 0, 0, 0.7)); /* Adds subtle dark shadow to the logo */
+
+}
+.txt{font-size: 0.6em; margin-top: 0.5em; letter-spacing: 0.1em;}
+
+    </style>
+</head>
+<body>
+
+    <!-- Fixed "SHORTS" text -->
+    <div class="top-text-container">
+    <button class="back-btn" onclick="window.history.back();">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+    <div class="top-text"><img src="img/logo.png" alt=""></div>
+</div>
+
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+        <?php
+    $videos = [
+        ["src" => "https://1a-1791.com/video/s8/2/y/q/N/l/yqNlu.caa.mp4?u=3&b=0", "title" => "Best Video Ever"],
+        ["src" => "https://1a-1791.com/video/s8/2/o/M/c/m/oMcmu.caa.mp4", "title" => "Another Cool Video"],
+        ["src" => "https://1a-1791.com/video/s8/2/t/y/c/m/tycmu.caa.mp4", "title" => "Another Cool Video"],
+        ["src" => "https://1a-1791.com/video/s8/2/V/l/8/l/Vl8lu.caa.mp4", "title" => "Another Cool Video"],
+        ["src" => "https://1a-1791.com/video/s8/2/z/i/a/m/ziamu.caa.mp4", "title" => "Another Cool Video"],
+        ["src" => "https://1a-1791.com/video/fwe1/67/s8/2/u/V/y/I/uVyIx.caa.mp4", "title" => "s"],
+
+    ];
+
+    foreach ($videos as $video) {
+        echo '<div class="swiper-slide">
+            <video class="lazyload" data-src="' . $video['src'] . '" loop autoplay muted></video>
+            <div class="loadingSpinner"><i class="fa fa-spinner" aria-hidden="true"></i>
+</div>
+            <i class="fas fa-play playPauseIcon"></i>
+            <div class="videoFooter">
+                <p style="color:#fff;">' . $video['title'] . '</p>
+            </div>
+            <div class="videoSidebar">
+                <button><i class="fa-regular fa-heart"><span class="txt"><br>200</span></i></button>
+                <button class="unmuteIcon"><i class="fas fa-volume-mute"></i></button>
+                <button><i class="fa-solid fa-comment"></i></button>
+
+            </div>
+        </div>';
+    }
+?>
+
+        </div>
+    </div>
+    <?php include 'parts/nav.php' ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const swiper = new Swiper('.swiper-container', {
+        direction: 'vertical',
+        slidesPerView: 1,
+        spaceBetween: 0,
+        mousewheel: true,
+        on: {
+            slideChangeTransitionEnd: function () {
+                playActiveVideo();
+                updateURL();
+            }
+        }
+    });
+
+    let isMuted = true;  // Tracks the global mute state
+
+    function playActiveVideo() {
+    let videos = document.querySelectorAll('video');
+    videos.forEach(video => {
+        if (video !== document.querySelector('.swiper-slide-active video')) {
+            video.pause();
+        }
+    });
+
+    let activeSlide = document.querySelector('.swiper-slide-active video');
+    let activeIcon = document.querySelector('.swiper-slide-active .playPauseIcon');
+    let unmuteIcon = document.querySelector('.swiper-slide-active .unmuteIcon');
+    let loadingSpinner = document.querySelector('.swiper-slide-active .loadingSpinner');
+
+    if (activeSlide) {
+        if (!activeSlide.src) {
+            activeSlide.src = activeSlide.getAttribute('data-src');
+        }
+
+        // Apply the global mute state to the video
+        activeSlide.muted = isMuted;
+
+        // Play video only if it's not already playing
+        if (activeSlide.paused) {
+            activeSlide.play();
+        }
+
+        activeIcon.style.display = 'none';
+
+        // Show loading spinner when video is buffering
+        activeSlide.onwaiting = () => {
+            loadingSpinner.style.display = 'block';  // Show spinner when buffering
+        };
+
+        // Hide loading spinner once video is playing
+        activeSlide.onplaying = () => {
+            loadingSpinner.style.display = 'none';  // Hide spinner when playing
+        };
+
+        if (activeSlide.muted) {
+            unmuteIcon.innerHTML = '<i class="fas fa-volume-mute"></i>';
+        } else {
+            unmuteIcon.innerHTML = '<i class="fas fa-volume-up"></i>';
+        }
+    }
+}
+
+
+    function updateURL() {
+        const activeSlide = document.querySelector('.swiper-slide-active');
+        const videoTitle = activeSlide.querySelector('.videoFooter p').textContent;
+        const newURL = `#${videoTitle.replace(/\s+/g, '-').toLowerCase()}`;
+
+        if (window.location.hash !== newURL) {
+            history.replaceState({}, '', newURL);  // Use replaceState instead of pushState
+        }
+    }
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            const video = entry.target;
+            if (entry.isIntersecting && !video.src) {
+                video.src = video.getAttribute('data-src');
+                video.play();
+                observer.unobserve(video);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.swiper-slide video').forEach((video, index) => {
+        let playPauseIcon = video.parentElement.querySelector('.playPauseIcon');
+        video.setAttribute('data-id', index);
+
+        observer.observe(video);
+
+        video.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playPauseIcon.style.display = 'none';
+            } else {
+                video.pause();
+                playPauseIcon.style.display = 'block';
+            }
+        });
+    });
+
+    document.querySelectorAll('.unmuteIcon').forEach((button) => {
+        button.addEventListener('click', () => {
+            let video = button.closest('.swiper-slide').querySelector('video');
+            
+            // If the video is muted, unmute it globally
+            if (isMuted) {
+                isMuted = false;
+                button.innerHTML = '<i class="fas fa-volume-up"></i>';
+            } else {
+                isMuted = true;
+                button.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            }
+
+            // Apply the global mute state to all videos
+            document.querySelectorAll('video').forEach((videoElement) => {
+                videoElement.muted = isMuted;
+            });
+        });
+    });
+
+    playActiveVideo();
+
+    // New functionality to handle URL hash changes and load the correct video
+    function handleHashChange() {
+        const hash = window.location.hash.substring(1); // Remove the "#" character
+        if (hash) {
+            const targetSlide = Array.from(document.querySelectorAll('.swiper-slide'))
+                .find(slide => slide.querySelector('.videoFooter p').textContent.toLowerCase().replace(/\s+/g, '-') === hash);
+            
+            if (targetSlide) {
+                swiper.slideTo(Array.from(document.querySelectorAll('.swiper-slide')).indexOf(targetSlide));
+                playActiveVideo();  // Play the video of the target slide
+            }
+        }
+    }
+
+    // Listen for hash change events
+    window.addEventListener('hashchange', handleHashChange);
+
+    // Call the function once on page load to handle the initial hash
+    handleHashChange();
+});
+
+
+
+</script>
+
+</body>
+</html>
