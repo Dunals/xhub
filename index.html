@@ -10,14 +10,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <link rel="stylesheet" href="style.css">
     <style>
+        
       html, body {
   overflow-x: hidden;  /* Disable horizontal scroll */
   overflow-y: scroll;  /* Enable vertical scroll, but hide the scrollbar */
   height: 100%;         /* Ensure full height */
   margin: 0;            /* Remove default margin */
   padding: 0;           /* Remove default padding */
+  -webkit-tap-highlight-color: transparent;
+
 }
 
 ::-webkit-scrollbar {
@@ -122,7 +124,6 @@
     align-items: center;
     padding: 0 10px;
     z-index: 10;
-    margin-top: 1em;
 }
 
 .top-text {
@@ -163,7 +164,7 @@
     <button class="back-btn" onclick="window.history.back();">
         <i class="fas fa-arrow-left"></i>
     </button>
-    <div class="top-text"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a9/TikTok_logo.svg/2560px-TikTok_logo.svg.png" alt=""></div>
+    <div class="top-text"><img src="img/logo.png" alt=""></div>
 </div>
 
     <div class="swiper-container">
@@ -177,7 +178,7 @@
                 <p style="color:#fff;">Best Video Ever</p>
             </div>
             <div class="videoSidebar">
-                <button><i class="fa-regular fa-heart"><span class="txt"><br>200</span></i></button>
+                <button><i class="fas fa-heart"><span class="txt"><br>200</span></i></button>
                 <button class="unmuteIcon"><i class="fas fa-volume-mute"></i></button>
                 <button><i class="fa-solid fa-comment"></i></button>
 
@@ -191,7 +192,7 @@
                 <p style="color:#fff;">Another Cool Video</p>
             </div>
             <div class="videoSidebar">
-                <button><i class="fa-regular fa-heart"><span class="txt"><br>200</span></i></button>
+                <button><i class="fas fa-heart"><span class="txt"><br>200</span></i></button>
                 <button class="unmuteIcon"><i class="fas fa-volume-mute"></i></button>
                 <button><i class="fa-solid fa-comment"></i></button>
 
@@ -205,7 +206,7 @@
                 <p style="color:#fff;">Another Cool Video</p>
             </div>
             <div class="videoSidebar">
-                <button><i class="fa-regular fa-heart"><span class="txt"><br>200</span></i></button>
+                <button><i class="fas fa-heart"><span class="txt"><br>200</span></i></button>
                 <button class="unmuteIcon"><i class="fas fa-volume-mute"></i></button>
                 <button><i class="fa-solid fa-comment"></i></button>
 
@@ -219,13 +220,13 @@
                 <p style="color:#fff;">Another Cool Video</p>
             </div>
             <div class="videoSidebar">
-                <button><i class="fa-regular fa-heart"><span class="txt"><br>200</span></i></button>
+                <button><i class="fas fa-heart"><span class="txt"><br>200</span></i></button>
                 <button class="unmuteIcon"><i class="fas fa-volume-mute"></i></button>
                 <button><i class="fa-solid fa-comment"></i></button>
 
             </div>
         </div><div class="swiper-slide">
-            <video class="lazyload" data-src="https://1a-1791.com/video/s8/2/P/b/9/Q/Pb9Qi.caa.mp4" loop autoplay muted></video>
+            <video class="lazyload" data-src="https://1a-1791.com/video/s8/2/P/b/9/Q/Pb9Qi.caa.mp" loop autoplay muted></video>
             <div class="loadingSpinner"><i class="fa fa-spinner" aria-hidden="true"></i>
 </div>
             <i class="fas fa-play playPauseIcon"></i>
@@ -233,7 +234,7 @@
                 <p style="color:#fff;">Another Cool Video</p>
             </div>
             <div class="videoSidebar">
-                <button><i class="fa-regular fa-heart"><span class="txt"><br>200</span></i></button>
+                <button><i class="fas fa-heart"><span class="txt"><br>200</span></i></button>
                 <button class="unmuteIcon"><i class="fas fa-volume-mute"></i></button>
                 <button><i class="fa-solid fa-comment"></i></button>
 
@@ -247,7 +248,7 @@
                 <p style="color:#fff;">s</p>
             </div>
             <div class="videoSidebar">
-                <button><i class="fa-regular fa-heart"><span class="txt"><br>200</span></i></button>
+                <button><i class="fas fa-heart"><span class="txt"><br>200</span></i></button>
                 <button class="unmuteIcon"><i class="fas fa-volume-mute"></i></button>
                 <button><i class="fa-solid fa-comment"></i></button>
 
@@ -279,6 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
     videos.forEach(video => {
         if (video !== document.querySelector('.swiper-slide-active video')) {
             video.pause();
+            video.muted = true;  // Ensure other videos are muted
         }
     });
 
@@ -292,24 +294,20 @@ document.addEventListener("DOMContentLoaded", () => {
             activeSlide.src = activeSlide.getAttribute('data-src');
         }
 
-        // Apply the global mute state to the video
         activeSlide.muted = isMuted;
 
-        // Play video only if it's not already playing
         if (activeSlide.paused) {
             activeSlide.play();
         }
 
         activeIcon.style.display = 'none';
 
-        // Show loading spinner when video is buffering
         activeSlide.onwaiting = () => {
-            loadingSpinner.style.display = 'block';  // Show spinner when buffering
+            loadingSpinner.style.display = 'block';
         };
 
-        // Hide loading spinner once video is playing
         activeSlide.onplaying = () => {
-            loadingSpinner.style.display = 'none';  // Hide spinner when playing
+            loadingSpinner.style.display = 'none';
         };
 
         if (activeSlide.muted) {
@@ -319,6 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 }
+
 
 
     function updateURL() {
@@ -348,15 +347,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         observer.observe(video);
 
-        video.addEventListener('click', () => {
-            if (video.paused) {
-                video.play();
-                playPauseIcon.style.display = 'none';
-            } else {
-                video.pause();
-                playPauseIcon.style.display = 'block';
-            }
-        });
+       video.addEventListener('click', () => {
+    if (video.paused) {
+        video.play();
+        playPauseIcon.style.display = 'none';
+    } else {
+        video.pause();
+        playPauseIcon.style.display = 'block';
+        video.muted = true;  // Ensure the video is muted when paused
+    }
+});
+
     });
 
     document.querySelectorAll('.unmuteIcon').forEach((button) => {
